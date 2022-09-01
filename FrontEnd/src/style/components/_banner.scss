@@ -1,0 +1,54 @@
+.hero{
+    height: 300px;
+    position: relative;
+
+    @media screen and (min-width: 920px) {
+        height: 400px;
+    }
+
+    .heroImg{
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position:0 -10rem ;
+    }
+
+    .heroContent {
+        position:relative;
+        top:-15rem;
+        width: 200px;
+        background: white;
+        padding: 2rem;
+        text-align: left;
+        margin:0 auto;
+
+        @media screen and (min-width: 920px) {
+          position: absolute;
+          top: 50px;
+          right: 50px;
+          width: 300px;
+          margin: 2rem;
+        }
+
+        .subtitle {
+            font-weight: bold;
+            font-size: 1rem;
+            margin: 0;
+
+            @media screen and (min-width: 920px) {
+              font-size: 1.5rem;
+            }
+        }
+        
+        .text {
+            margin-top: 15px;
+            font-size: 0.9rem;
+
+            @media screen and (min-width: 920px) {
+              font-size: 1.2rem;
+            }
+        }
+    }
+
+}
+

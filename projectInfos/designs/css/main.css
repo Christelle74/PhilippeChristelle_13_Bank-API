@@ -1,3 +1,5 @@
+
+
 html {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -35,6 +37,30 @@ body {
   white-space: nowrap !important; /* 3 */
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* dejà utilisé */
 .main-nav {
   display: flex;
   justify-content: space-between;
@@ -46,11 +72,9 @@ body {
   font-weight: bold;
   color: #2c3e50;
 }
-
 .main-nav a.router-link-exact-active {
   color: #42b983;
 }
-
 .main-nav-item {
   text-decoration: none;
   margin-right: 0.5rem;
@@ -122,6 +146,7 @@ body {
     font-size: 1.2rem;
   }
 }
+
 
 .features {
   display: flex;
@@ -201,7 +226,6 @@ body {
   padding: 5px;
   font-size: 1.2rem;
 }
-
 .footer {
   display: flex;
   justify-content: center;
@@ -250,7 +274,6 @@ body {
   width: 100%;
   flex: 1;
 }
-
 .edit-button {
   border-color: #00bc77;
   background-color: #00bc77;
@@ -275,7 +298,6 @@ body {
   background-color: #00bc77;
   color: #fff;
 }
-
 @media (min-width: 720px) {
   .account {
     flex-direction: row;
