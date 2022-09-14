@@ -1,47 +1,62 @@
 * {
-    //box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+  //box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 $font-1: Avenir, Helvetica, Arial, sans-serif;
 
-$font-2 :source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+$font-2: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 
-$color-1 :#12002b;
+$color-1: #12002b;
 
 body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-    font-family: $font-2
+  font-family: $font-2;
 }
 
-#root{
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: $font-1;
-    text-align: center;
-    color: #2c3e50;
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: $font-1;
+  text-align: center;
+  color: #2c3e50;
 }
 
-.main{
-    font-weight: 500;
-    flex: 1;
+.main {
+  font-weight: 500;
+  flex: 1;
 }
 
-.bgDark{
-    background-color: $color-1;
+.bgDark {
+  background-color: $color-1;
 }
 
-.fa{
-    font-size: 18px;
+.fa {
+  font-size: 18px;
 }
+
+
+.sr-only {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important; /* 2 */
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  white-space: nowrap !important; /* 3 */
+}
+
 
 //   .App-logo {
 //     height: 40vmin;

@@ -1,22 +1,21 @@
 .transactionButton {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 1rem;
-    border-color: #00bc77;
-    background-color: #00bc77;
-    color: #fff;
+  display: block;
+  width: 100%;
+  padding: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  border-color: #00bc77;
+  background-color: #00bc77;
+  color: #fff;
 }
 
 @media (min-width: 720px) {
+  .accountContentWrapper.cta {
+    flex: 0;
+  }
 
-    .accountContentWrapper.cta {
-        flex: 0;
-    }
-
-    .transactionButton {
-        width: 200px;
-    }
+  .transactionButton {
+    width: 200px;
+  }
 }
