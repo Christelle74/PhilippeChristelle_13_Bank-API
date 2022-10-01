@@ -3,8 +3,12 @@ import LoginForm from '../components/LoginForm'
 import { FaUserCircle } from 'react-icons/fa'
 
 
+/**
+ * Display the login page with the login form
+ * @component
+ * @returns {JSX.Element} LoginPage component
+ */
 const LoginPage = () => {
-
   return (
     <div className="bgDark main">
       <div className="signInContent">

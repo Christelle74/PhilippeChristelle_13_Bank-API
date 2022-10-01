@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid black;
+  border: 1px solid rgb(180, 179, 179);
   background-color: #fff;
   width: 80%;
   margin: 0 auto;
@@ -36,10 +36,41 @@
       margin: 0;
     }
   }
+    
 }
+.transactionButton {
+      display: block;
+      min-width: 200px;
+      width: 100%;
+      padding: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      cursor: pointer;
+      color: #fff;
+
+    &.violetBtn{
+      border-color: #7461ec;
+      background-color: #8373eb;
+  }
+    &.greenBtn{
+      border-color: #00bc77;
+      background-color: #00bc77;
+    }
+  }
+
+
 
 @media (min-width: 720px) {
+  .accountContentWrapper.cta {
+    flex: 0;
+  }
+
+  .cta >.transactionButton {
+    width: 100%;
+  }
   .account {
     flex-direction: row;
   }
 }
+

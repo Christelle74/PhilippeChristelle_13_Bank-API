@@ -4,6 +4,12 @@ import Chat from '../assets/img/icon-chat.png'
 import Money from '../assets/img/icon-money.png'
 import Security from '../assets/img/icon-security.png'
 
+
+/**
+ * Creation of the features component
+ * @component
+ * @returns {JSX.Element}
+ */
 const Features = () => {
   return (
     <div className="features">

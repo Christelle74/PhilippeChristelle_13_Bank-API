@@ -1,0 +1,56 @@
+.accountHeader {
+    color: #fff;
+    margin-bottom: 2rem;
+    margin-top: 15px;
+
+    h2 {
+        font-size: 2em;
+    }
+
+    .editButton {
+        border-color: #00bc77;
+        background-color: #00bc77;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px;
+        margin-top: 15px;
+    }
+
+    .userForm{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+
+        .inputWrapper, .userButtons {
+            display: flex;
+            padding: 5px;
+        }
+
+        .inputWrapper>input{
+            padding: 8px;
+            font-size: 1.0rem;
+            margin: 5px;
+        }
+        .userButtons .btn{
+            padding: 10px;
+            font-size: 1.0rem;
+            width: 7rem;
+            margin: 0 5px;
+            color: #8373eb;
+            font-weight: 700;
+            font-size: 12px;
+            border-color:#8373eb ;
+        }
+    }
+    .blackTitle{
+        color: $color-1;
+    }
+    .whiteTitle{
+        color:white;
+    }
+}
+
+
+

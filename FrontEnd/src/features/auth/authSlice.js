@@ -1,22 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
 
-// Get user token from localStorage
+
 
 const initialState = {
   userInfos : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isRemembered: false,
   message: '',
   token:null,
+  firstName:'',
+  lastName:'',
+  changeColor:false
 }
 
 // Login user : login  appelle le service login
-export const login = createAsyncThunk('auth/login', async (loginData, thunkAPI) => {
+export const login = createAsyncThunk('auth/login', async (formData, thunkAPI) => {
   try { 
-    console.log(loginData)//ici on récupère l'email et le password
-    return await authService.login(loginData)
+    //console.log(formData)//ici on récupère l'email et le password
+    return await authService.login(formData)
     
   } catch (error) {
     const message =
@@ -33,7 +37,7 @@ export const login = createAsyncThunk('auth/login', async (loginData, thunkAPI) 
 export const userProfile = createAsyncThunk('auth/userProfile', async (profileData, thunkAPI)=>{
   try {
     const token = thunkAPI.getState().auth.userInfos.body.token;
-    console.log(token)
+    //console.log(token)
     return await authService.userProfile(profileData, token)
   }catch (error) {
     const message =
@@ -44,6 +48,20 @@ export const userProfile = createAsyncThunk('auth/userProfile', async (profileDa
   }
 })
 
+//update user profile data
+export const updateUserData = createAsyncThunk('auth/updateUserData', async (newData, thunkAPI)=>{
+  try {
+    const token = thunkAPI.getState().auth.userInfos.body.token;
+    console.log(token)
+    return await authService.updateUserData(newData, token)
+  }catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString()
+    return thunkAPI.rejectWithValue(message)
+  }
+})
 
 //logout
 export const logout = createAsyncThunk('auth/logout', async () => {
@@ -61,9 +79,16 @@ export const authSlice = createSlice({
       state.isLoading = false
       state.isSuccess = false
       state.isError = false
+      state.isRemembered=false
       state.message = ''
       state.token=""
+      state.firstName = ""
+      state.lastName = ""
+      state.changeColor=false
     },
+    changeButtonColor : (state) =>{
+      state.changeColor=true
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -74,10 +99,9 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.isError=false
+        state.message=""
         state.userInfos = action.payload
-        state.token= action.payload.body.token
-        state.isError = false;
-        state.message = "";
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false
@@ -88,30 +112,49 @@ export const authSlice = createSlice({
 
       //logout
       .addCase(logout.fulfilled, (state) => {
-        state.user = null
+        state.userInfos = null
         state.token =null
       })
 
        //profile
-       .addCase(userProfile.pending, (state) => {
-         state.isLoading = true
-       })
-       .addCase(userProfile.fulfilled, (state, action) => {
-         state.isLoading = false
-         state.isSuccess = true
-         state.isError=false
-         state.message =''
-         state.userInfos=action.payload
-       })
-       .addCase(userProfile.rejected, (state, action) => {
-         state.isLoading = false
-         state.isError = true
-         state.message = action.payload
-       })
+      .addCase(userProfile.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(userProfile.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError=false
+        state.message =''
+        state.firstName = action.payload.firstName;
+        state.lastName = action.payload.lastName;
+      })
+      .addCase(userProfile.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
       
+
+      //update profile
+      .addCase(updateUserData.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateUserData.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.firstName= action.payload.firstName;
+        state.lastName = action.payload.lastName;
+        state.isError=false
+        state.message =''
+      })
+      .addCase(updateUserData.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
   },
 })
 
-export const { reset } = authSlice.actions
+export const { reset, changeButtonColor } = authSlice.actions
 export default authSlice.reducer
 

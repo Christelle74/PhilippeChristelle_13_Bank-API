@@ -15,18 +15,22 @@
     }
   }
 
-  .mainNavSignIn {
+  .mainNavItem {
     text-decoration: none;
     margin-right: 0.5rem;
     display: flex;
     align-items: center;
 
+    span{
+      margin-right: 10px;
+      font-weight: 700;
+    }
     .fa {
       margin-right: 5px;
     }
   }
 
-  .mainNavSignIn:hover {
+  .mainNavItem:hover {
     text-decoration: underline;
   }
 

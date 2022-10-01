@@ -1,6 +1,12 @@
 import React from 'react'
 import image from '../assets/img/bank-tree.jpeg'
 
+
+/**
+ * Creation of the home banner with an image and desciption
+ * @component
+ * @returns {JSX.Element} banner component
+ */
 const Banner = () => {
   return (
     <div className="hero">

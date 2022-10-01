@@ -10,6 +10,7 @@ $font-1: Avenir, Helvetica, Arial, sans-serif;
 $font-2: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 
 $color-1: #12002b;
+$color-2: lightgrey;
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -37,7 +38,9 @@ code {
 .bgDark {
   background-color: $color-1;
 }
-
+.bgLight {
+  background-color: $color-2;
+}
 .fa {
   font-size: 18px;
 }

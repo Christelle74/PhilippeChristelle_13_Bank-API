@@ -1,25 +1,26 @@
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { FaUserCircle } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import {logout, reset} from "../features/auth/authSlice"
 
 
-
+/**
+ * Creation of the navigation barre or header
+ * @component
+ * @returns {JSX.Element} Navigation component
+ */
 
 const Navigation = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const  {userInfos, isSucces} = useSelector((state) => state.auth)
+  const  {userInfos, isSuccess, firstName} = useSelector((state) => state.auth)
   
   
   const onLogout = ()=>{ 
     dispatch(logout())
     dispatch(reset())
-    navigate('/')
   }
   
-
   return (
     <div className="mainNav">
       <NavLink className="mainNavLogo" to="/">
@@ -30,23 +31,23 @@ const Navigation = () => {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </NavLink>
-      <div>
-        {userInfos && isSucces ? ( 
+      <div className="mainNavItem">
+        {userInfos && isSuccess ? ( 
           <>
-            <NavLink className="mainNavSignIn" to="/profile">
+            <div className="mainNavItem">
               <FaUserCircle className="fa" />
-              <span>{userInfos.firstName}</span>
-            </NavLink>
-            <NavLink className="mainNavSignIn"  onClick={onLogout}>
+              <span>{firstName}</span>
+            </div>
+            <Link to="/" className="mainNavItem"  onClick={onLogout}>
               <i className="fa fa-sign-out"></i>
               Sign Out
-            </NavLink>
+            </Link>
           </>
           ) : ( 
-          <NavLink className="mainNavSignIn" to="/login">
+          <Link to ='/login' className="mainNavSignIn" >
             <FaUserCircle className="fa" />
             Sign In
-          </NavLink>
+          </Link>
           )
         } 
       </div>
