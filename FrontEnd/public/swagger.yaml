@@ -8,6 +8,7 @@ host: localhost:3001
 basePath: /api/v1
 schemes:
   - http
+  - https
 paths:
   /user/login:
     post:
@@ -70,6 +71,7 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
+          type: string
       produces:
         - application/json
       responses:
@@ -93,6 +95,7 @@ paths:
           name: Authorization
           description: Attach Bearer JWT token
           required: true
+          type: string
         - in: body
           name: body
           description: Update user profile attributes
@@ -110,6 +113,65 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
+  /user/profile/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User Transactions
+      summary: User Transactions API
+      description: API for fetching a user transactions
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User transactions retrieved successfully
+          schema:
+            $ref: '#/definitions/ApiTransactionsResponse'
+        '400':
+          description: Transactions not found
+        '500':
+          description: Internal Server Error
+    
+  /user/profile/transactions/id:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Transactions
+      summary: User Transactions API
+      description: API for updating a user transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Update user transactions attributes
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionDescription'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: transaction updated successfully
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+
+
+          
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -164,3 +226,59 @@ definitions:
         type: string
       lastName:
         type: string
+        
+        
+  ApiTransactionsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          date:
+            type: string
+          description:
+            type: string 
+          amount:
+            type: integer
+          balance:
+            type: number
+              
+  UserTransactions:
+    type: object
+    properties:
+      id:
+        type: string
+        description: transaction id
+      date:
+        type: string
+        description: transaction date
+      description:
+        type: string
+        description: transaction description
+      amount:
+        type: integer
+        description: transaction amount
+      balance:
+        type: number
+        description: account balance after transaction
+        
+  TransactionDescription:
+    type: object
+    properties:
+      transactionType:
+        type: string
+        description: transaction type
+      category:
+        type: string
+        description: transaction category
+      notes: 
+        type: string
+        description:  user notes about the transaction
+      
+        

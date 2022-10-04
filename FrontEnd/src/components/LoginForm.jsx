@@ -16,65 +16,68 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { userInfos, isLoading,  isError, isSuccess, message} = useSelector(
+    const {userInfos, isLoading,  isError, isSuccess, message} = useSelector(
       (state) => state.auth
     )
-       
-    const [formData, setFormData]= useState({
-        email:"",
-        password:"",
+
+    const [rememberMe, setRememberMe]= useState(true)
+    const [datas, setDatas] = useState({
+      email:"",
+      password:"",
     })
-    const {email, password} = formData // destructuring 
-    //console.log(email, password)
+    
+    const token = localStorage.getItem("token")
+      console.log(token)
+
+      if (token) {
+        navigate('/profile')
+      }
 
     useEffect(() => {
+    
       if(isError){ 
-      toast.error(message)}
-      
+      toast.error(message)
+      }
+
       if (userInfos|| isSuccess) {
-        localStorage.setItem("token", userInfos.body.token)
         navigate('/profile')
       }
       dispatch(reset())
     }, [userInfos,  isError, isSuccess, message, navigate, dispatch])
-
-    //récupération des données saisies dans un objet, mise à jour du state en appelant setFormData dans onChange
-    const onChange=({currentTarget})=>{
-      const {value, name} = currentTarget
-      setFormData({
-        ...formData,//on garde les données saisies (components, hooks, state)
-        [name]: value
-      })
-    }
    
-    const onSubmit=(e)=>{
+
+    const handleSubmit=(e)=>{
         e.preventDefault()
-        const userData= {
-          email, password, 
-        }
-        if(userData){
-        dispatch(login(userData))
+        //console.log(datas)
+        if(datas){
+        dispatch(login(datas))
       }
     }
 
+    const handleRememberMe= ()=>{
+      if(rememberMe){setRememberMe(false)}
+      if(!rememberMe){setRememberMe(true)}
+      console.log(rememberMe)
+    }
+
+
     return (
       <>
-        <form className='form'  onSubmit={onSubmit}>
+        <form className='form'  onSubmit={handleSubmit}>
             <div className="inputWrapper">
                 <label htmlFor="email">Username</label>
-                <input type="email" id="email" name='email' required   onChange={onChange}/>
+                <input type="email" id="email" name='email' required   onChange={(e)=>setDatas({...datas, email: e.target.value})}/>
             </div>
             <div className="inputWrapper">
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" name="password" required  onChange={onChange}/>
+                <input type="password" id="password" name="password" required  onChange={(e)=>setDatas({...datas, password: e.target.value})}/>
             </div>
             <div className="inputRemember">
-                <input type="checkbox" id="remember-me"/>
+                <input type="checkbox" id="remember-me" onClick={handleRememberMe}/>
                 <label htmlFor="remember-me" >Remember me</label>
             </div>
-            { !isLoading &&<button className="signInButton" type="submit">Sign In</button>}
-            { isLoading && <><button className="signInButton" type="submit">Sign In</button>
-            <div className='error'>Utilisateur inexistant</div><Loader/></>}
+            <button className="signInButton" type="submit">Sign In</button>
+            {isLoading && <><div className='error'>Utilisateur inexistant</div><Loader/></>}
         </form>
       </>
     );

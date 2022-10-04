@@ -7,18 +7,19 @@ const API_URL = 'http://localhost:3001/api/v1/user/'
  * @description links with backEnd 
  */
 
-// Login user : va chercher les données du backend
+// Login user : get datas from backend
 const login = async (formData) => {
     return  await axios.post(API_URL + 'login', formData)
     .then((res) => {
-        //console.log(res.data)
+        //console.log(res.data.body.token)
+        if(res.data){localStorage.setItem("token", res.data.body.token)}
         return res.data
     })
     .catch((error)=>console.log(error))
 }
 
 
-//profile user on recupère les données utilisateur avec le token 
+//profile user : get data user's profile with the token from backend
 const userProfile = async(profileData, token)=>{
     const config={
         headers: {
@@ -27,7 +28,6 @@ const userProfile = async(profileData, token)=>{
     }
     return await axios.post(API_URL + 'profile', profileData, config)
         .then((res)=> {
-            console.log(res.data.body)
             return res.data.body})
         .catch((error)=>console.log(error))
 }

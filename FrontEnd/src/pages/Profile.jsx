@@ -18,9 +18,7 @@ const Profile = () => {
     const {userInfos,message, firstName, lastName, isError, } = useSelector((state)=> state.auth)
     const authFirstName =useSelector((state)=>state.auth.firstName)
     const authLastName =useSelector((state)=>state.auth.lastName)
-    const token =useSelector((state)=>state.auth.userInfos.body.token)
-    console.log(authFirstName, authLastName, token)
-    
+        
 
     useEffect(()=>{
       if(isError){
@@ -35,44 +33,29 @@ const Profile = () => {
     const [editNameForm, setEditNameForm] = useState(false)
     const [editBackground, setEditBackground] =useState(false)
 
-    const editForm=()=>{
-      if(!editNameForm){setEditNameForm(true)}
-      if(!editBackground){setEditBackground(true)}
+    const editForm=(e)=>{
+      e.preventDefault()
+      setEditNameForm((current)=>!current)
+      setEditBackground((current)=>!current)
     }
 
     //form values
-    const [updateData, setUpdateData]= useState({
-      userUpdateFirstName:"",
-      userUpdateLastName:"",
-    })
-    const {userUpdateFirstName, userUpdateLastName} = updateData // destructuring 
-    //console.log(email, password)
-
-    const onChange=({currentTarget})=>{
-      const {value, name} = currentTarget
-      console.log(value, name)
-      setUpdateData({
-        ...updateData,//on garde les données saisies (components, hooks, state)
-        [name]: value
-      })
-    }
+    const [updateFirstName, setUpdateFirstName] = useState("");
+	  const [updateLastName, setUpdateLastName] = useState("");
+    
 
     const onSave=(e)=>{
       e.preventDefault()
       const userUpdateData= {
-        firstName: userUpdateFirstName? userUpdateFirstName: firstName,
-        lastName: userUpdateLastName ? userUpdateLastName : lastName,
+        firstName: updateFirstName? updateFirstName: firstName,
+        lastName: updateLastName ? updateLastName : lastName,
       }
       dispatch(updateUserData(userUpdateData))
       console.log(userUpdateData)
-      if(editNameForm){setEditNameForm(false)}
-      if(editBackground){setEditBackground(false)}
+      setEditNameForm((current)=>!current)
+      setEditBackground((current)=>!current)
     }
 
-    const onCancel=()=>{
-      if(editNameForm){setEditNameForm(false)}
-      if(editBackground){setEditBackground(false)}
-    }
 
   return (
     <div className={editBackground? "main bgLight" : "main bgDark"}>
@@ -85,14 +68,14 @@ const Profile = () => {
               <form className='userForm'>
                 <div className="inputWrapper">
                     <label htmlFor="firstName"></label>
-                    <input type="text" id="firstName" name='firstName' placeholder='FirstName' required  onChange={onChange}/>
+                    <input type="text" id="firstName" name='firstName' placeholder='FirstName' required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
                     <label htmlFor="lastName"></label>
-                    <input type="text" id="lastName" name="lastName" placeholder='LastName' required onChange={onChange}/>
+                    <input type="text" id="lastName" name="lastName" placeholder='LastName' required onChange={(e)=>setUpdateLastName(e.target.value)}/>
                 </div>
                 
                 <div className="userButtons">
                   <button className="btn" type="submit" onClick={onSave}>Save</button>
-                  <button className="btn" type="submit" onClick={onCancel}>Cancel</button>
+                  <button className="btn" type="submit" onClick={editForm}>Cancel</button>
                 </div>
               </form>
             ) :

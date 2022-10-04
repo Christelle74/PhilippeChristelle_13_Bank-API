@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>pages/Profile.jsx - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccountItem">AccountItem</a></li><li><a href="global.html#API">API</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#Feature">Feature</a></li><li><a href="global.html#Features">Features</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProtectedRoute">ProtectedRoute</a></li><li><a href="global.html#store">store</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">pages/Profile.jsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, {useEffect} from 'react'
+import AccountItem from '../components/AccountItem'
+//import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector} from 'react-redux'
+import { toast } from 'react-toastify'
+import { userProfile, updateUserData, reset} from "../features/auth/authSlice"
+import { useState } from 'react'
+
+/**
+ * Display the profile page with account elements
+ * @component
+ * @returns {JSX.Element} Profile component
+ */
+const Profile = () => {
+    const dispatch = useDispatch()
+    //const navigate = useNavigate()
+
+    const {userInfos,message, firstName, lastName, isError, } = useSelector((state)=> state.auth)
+    const authFirstName =useSelector((state)=>state.auth.firstName)
+    const authLastName =useSelector((state)=>state.auth.lastName)
+        
+
+    useEffect(()=>{
+      if(isError){
+        toast.error(message);
+        dispatch(reset())
+        }
+
+      dispatch(userProfile())
+    }, [userInfos,  isError, message,firstName, lastName, dispatch])
+
+    //Edit form mode
+    const [editNameForm, setEditNameForm] = useState('')
+    const [editBackground, setEditBackground] =useState('')
+
+    const editForm=(e)=>{
+      e.preventDefault()
+      setEditNameForm((current)=>!current)
+      setEditBackground((current)=>!current)
+      // if(!editNameForm){setEditNameForm(true)}
+      // if(!editBackground){setEditBackground(true)}
+    }
+
+    //form values
+    const [updateFirstName, setUpdateFirstName] = useState("");
+	  const [updateLastName, setUpdateLastName] = useState("");
+    
+
+    const onSave=(e)=>{
+      e.preventDefault()
+      const userUpdateData= {
+        firstName: updateFirstName? updateFirstName: firstName,
+        lastName: updateLastName ? updateLastName : lastName,
+      }
+      dispatch(updateUserData(userUpdateData))
+      console.log(userUpdateData)
+      setEditNameForm((current)=>!current)
+      setEditBackground((current)=>!current)
+    }
+
+
+  return (
+    &lt;div className={editBackground? "main bgLight" : "main bgDark"}>
+      &lt;div className="accountHeader">
+          &lt;h1 className={editBackground ? 'blackTitle' : 'whiteTitle' }>Welcome back&lt;/h1>
+
+          {
+            editNameForm ? 
+            (
+              &lt;form className='userForm'>
+                &lt;div className="inputWrapper">
+                    &lt;label htmlFor="firstName">&lt;/label>
+                    &lt;input type="text" id="firstName" name='firstName' placeholder='FirstName' required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
+                    &lt;label htmlFor="lastName">&lt;/label>
+                    &lt;input type="text" id="lastName" name="lastName" placeholder='LastName' required onChange={(e)=>setUpdateLastName(e.target.value)}/>
+                &lt;/div>
+                
+                &lt;div className="userButtons">
+                  &lt;button className="btn" type="submit" onClick={onSave}>Save&lt;/button>
+                  &lt;button className="btn" type="submit" onClick={editForm}>Cancel&lt;/button>
+                &lt;/div>
+              &lt;/form>
+            ) :
+            (
+              &lt;div>
+                &lt;h2>{authFirstName + ' ' +authLastName}&lt;/h2>
+                &lt;button className="editButton" onClick={editForm}>Edit Name&lt;/button>
+              &lt;/div>
+
+            )
+          }
+
+      &lt;/div> 
+      &lt;h2 className="sr-only">Accounts&lt;/h2>
+      &lt;AccountItem 
+        editBackground={editBackground}
+        title="Argent Bank Checking (x8349)"
+        amount="$2,082.79"
+        description="Available Balance"
+      />
+      &lt;AccountItem
+        editBackground={editBackground}
+        title="Argent Bank Savings (x6712)"
+        amount="$10,928.42"
+        description="Available Balance"
+      />
+      &lt;AccountItem
+        editBackground={editBackground}
+        title="Argent Bank Credit Card (x8349)"
+        amount="$184.30"
+        description="Current Balance"
+      />
+    &lt;/div>
+  )
+}
+
+export default Profile
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 04 2022 15:26:09 GMT+0200 (heure d’été d’Europe centrale) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

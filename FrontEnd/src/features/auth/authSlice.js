@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
 
+//createSlice : methode d'assistance qui simplifie le processus de creation d'actions et de reducteurs
+//createAsyncThunk : ecrit la logique asynchrone
 
 
 const initialState = {
@@ -8,12 +10,9 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  isRemembered: false,
   message: '',
-  token:null,
   firstName:'',
-  lastName:'',
-  changeColor:false
+  lastName:''
 }
 
 // Login user : login  appelle le service login
@@ -38,6 +37,7 @@ export const userProfile = createAsyncThunk('auth/userProfile', async (profileDa
   try {
     const token = thunkAPI.getState().auth.userInfos.body.token;
     //console.log(token)
+   
     return await authService.userProfile(profileData, token)
   }catch (error) {
     const message =
@@ -79,16 +79,11 @@ export const authSlice = createSlice({
       state.isLoading = false
       state.isSuccess = false
       state.isError = false
-      state.isRemembered=false
       state.message = ''
-      state.token=""
       state.firstName = ""
       state.lastName = ""
-      state.changeColor=false
     },
-    changeButtonColor : (state) =>{
-      state.changeColor=true
-    }
+   
   },
   extraReducers: (builder) => {
     builder
@@ -113,7 +108,6 @@ export const authSlice = createSlice({
       //logout
       .addCase(logout.fulfilled, (state) => {
         state.userInfos = null
-        state.token =null
       })
 
        //profile
@@ -155,6 +149,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { reset, changeButtonColor } = authSlice.actions
+export const { reset } = authSlice.actions
 export default authSlice.reducer
 

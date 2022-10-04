@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
  * @param {String} title 
  * @param {String} amount
  * @param {String} description
- * @param {Function} editBackground change the color of the button
+ * @param {Boolean} editBackground change the color of the button
  * @returns {JSX.Element} 
  */
 const AccountItem = ({ title, amount, description, editBackground }) => {
@@ -35,5 +35,5 @@ AccountItem.propTypes = {
   title: PropTypes.string.isRequired,
   amount: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  editBackground:PropTypes.func.isRequired,
+  editBackground:PropTypes.bool.isRequired,
 }

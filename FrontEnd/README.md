@@ -1,3 +1,59 @@
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
+
+---
+
+![logo](src/assets/img/argentBankLogo.png)
+
+## Presentation
+
+BankApi project is an application for users that want to follow their accounts through a dashboard.
+
+## Prerequisites
+
+- [NodeJS (**version 16.17.0**)](https://nodejs.org/en/)
+- [NPM (**version 8.15.0**)](https://www.npmjs.com/)
+- [REACT (**version 18.2.0**)](https://en.reactjs.org/)
+- Redux toolkit
+- MongoDB
+- VsCode
+
+If you are working with several versions of NodeJS, we recommend you install [nvm](https://github.com/nvm-sh/nvm). This tool will allow you to easily manage your NodeJS versions.
+
+## Installing the app
+
+- Forke and clone the repository : https://github.com/Christelle74/PhilippeChristelle_13_Bank-API.git
+- Run the `npm` command will allow you to install the dependencies
+
+- Install and run MongoDb
+
+
+- Backend :
+  open a new terminal and run `cd BackEnd` command,
+  then run `npm run dev:server`command 
+  
+  then open another new terminal and run `cd BackEnd` command,
+  then run `npm run populate-db`
+  the backend will open http://localhost:3001
+
+- FrontEnd:
+  open a new terminal, `cd FrontEnd` then run the `npm start` command will allow you to run the application on http://localhost:3000
+
+## Author
+
+Christelle Philippe
+
+---
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

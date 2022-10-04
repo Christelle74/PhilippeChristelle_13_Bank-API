@@ -8,6 +8,7 @@ import Profile from './pages/Profile'
 import Home from './pages/Home'
 import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './pages/ProtectedRoute'
+import Swagger from './pages/Swagger'
 
 
 const App = () => {
@@ -15,17 +16,18 @@ const App = () => {
   return (
     <>
     <Router>
+      <ToastContainer/>
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<ProtectedRoute/>}> 
           <Route path="/profile" element={<Profile />} />
-        </Route> 
+        </Route>
+        <Route path="/swagger" element={<Swagger/>} /> 
       </Routes>
       <Footer />
     </Router>
-    <ToastContainer/>
     </>
   )
 }
