@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
 
+
 //createSlice : methode d'assistance qui simplifie le processus de creation d'actions et de reducteurs
 //createAsyncThunk : ecrit la logique asynchrone
 
+//const token = localStorage.getItem("token") ? localStorage.getItem('token') : null
 
 const initialState = {
   userInfos : null,
@@ -12,7 +14,8 @@ const initialState = {
   isLoading: false,
   message: '',
   firstName:'',
-  lastName:''
+  lastName:'',
+  //token,
 }
 
 // Login user : login  appelle le service login
@@ -35,9 +38,8 @@ export const login = createAsyncThunk('auth/login', async (formData, thunkAPI) =
  //createAsyncThunk génère les 3 types d'action de cyle de vie pending, fulfilled et rejected
 export const userProfile = createAsyncThunk('auth/userProfile', async (profileData, thunkAPI)=>{
   try {
-    const token = thunkAPI.getState().auth.userInfos.body.token;
+    const token = thunkAPI.getState().auth.userInfos.body.token ;
     //console.log(token)
-   
     return await authService.userProfile(profileData, token)
   }catch (error) {
     const message =
@@ -52,7 +54,7 @@ export const userProfile = createAsyncThunk('auth/userProfile', async (profileDa
 export const updateUserData = createAsyncThunk('auth/updateUserData', async (newData, thunkAPI)=>{
   try {
     const token = thunkAPI.getState().auth.userInfos.body.token;
-    console.log(token)
+    //console.log(token)
     return await authService.updateUserData(newData, token)
   }catch (error) {
     const message =
@@ -75,57 +77,55 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      //localStorage.removeItem('token')
       state.isLoading = false
       state.isSuccess = false
       state.isError = false
-      state.message = ''
+      state.message = ""
       state.firstName = ""
       state.lastName = ""
-    },
-   
+    }
   },
   extraReducers: (builder) => {
     builder
     //login
       .addCase(login.pending, (state) => {
         state.isLoading = true
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
         state.isError=false
-        state.message=""
-        state.userInfos = action.payload
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(login.fulfilled, (state, {payload}) => {
+        state.isLoading = false
+        state.message=""
+        state.userInfos = payload
+        //state.token =payload.body.token
+      })
+      .addCase(login.rejected, (state, {payload}) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
-        state.userInfos = null
+        state.message = payload
       })
 
       //logout
       .addCase(logout.fulfilled, (state) => {
         state.userInfos = null
+        //state.token=null
       })
 
        //profile
       .addCase(userProfile.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(userProfile.fulfilled, (state, action) => {
+      .addCase(userProfile.fulfilled, (state, {payload}) => {
         state.isLoading = false
         state.isSuccess = true
         state.isError=false
         state.message =''
-        state.firstName = action.payload.firstName;
-        state.lastName = action.payload.lastName;
+        state.firstName = payload.firstName;
+        state.lastName = payload.lastName;
       })
-      .addCase(userProfile.rejected, (state, action) => {
+      .addCase(userProfile.rejected, (state, {payload}) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = payload
       })
       
 
@@ -133,18 +133,18 @@ export const authSlice = createSlice({
       .addCase(updateUserData.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(updateUserData.fulfilled, (state, action) => {
+      .addCase(updateUserData.fulfilled, (state, {payload}) => {
         state.isLoading = false
         state.isSuccess = true
-        state.firstName= action.payload.firstName;
-        state.lastName = action.payload.lastName;
+        state.firstName= payload.firstName;
+        state.lastName = payload.lastName;
         state.isError=false
         state.message =''
       })
-      .addCase(updateUserData.rejected, (state, action) => {
+      .addCase(updateUserData.rejected, (state, {payload}) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload
+        state.message = payload
       })
   },
 })

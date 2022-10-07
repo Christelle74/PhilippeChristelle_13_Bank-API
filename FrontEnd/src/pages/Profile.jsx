@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react'
 import AccountItem from '../components/AccountItem'
-//import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector} from 'react-redux'
 import { toast } from 'react-toastify'
 import { userProfile, updateUserData, reset} from "../features/auth/authSlice"
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * Display the profile page with account elements
@@ -13,7 +13,7 @@ import { useState } from 'react'
  */
 const Profile = () => {
     const dispatch = useDispatch()
-    //const navigate = useNavigate()
+    const navigate = useNavigate()
 
     const {userInfos,message, firstName, lastName, isError, } = useSelector((state)=> state.auth)
     const authFirstName =useSelector((state)=>state.auth.firstName)
@@ -25,9 +25,12 @@ const Profile = () => {
         toast.error(message);
         dispatch(reset())
         }
-
+      if(!userInfos){
+        navigate ('/login')
+      }
+       
       dispatch(userProfile())
-    }, [userInfos,  isError, message,firstName, lastName, dispatch])
+    }, [userInfos,  isError, message,firstName, lastName, navigate, dispatch])
 
     //Edit form mode
     const [editNameForm, setEditNameForm] = useState(false)
@@ -68,9 +71,9 @@ const Profile = () => {
               <form className='userForm'>
                 <div className="inputWrapper">
                     <label htmlFor="firstName"></label>
-                    <input type="text" id="firstName" name='firstName' placeholder='FirstName' required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
+                    <input type="text" id="firstName" name='firstName' placeholder={firstName} required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
                     <label htmlFor="lastName"></label>
-                    <input type="text" id="lastName" name="lastName" placeholder='LastName' required onChange={(e)=>setUpdateLastName(e.target.value)}/>
+                    <input type="text" id="lastName" name="lastName" placeholder={lastName} required onChange={(e)=>setUpdateLastName(e.target.value)}/>
                 </div>
                 
                 <div className="userButtons">

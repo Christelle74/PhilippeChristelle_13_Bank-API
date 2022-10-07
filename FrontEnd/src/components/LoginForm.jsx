@@ -16,7 +16,7 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {userInfos, isLoading,  isError, isSuccess, message} = useSelector(
+    const {userInfos, isLoading,  isError, isSuccess,token, message} = useSelector(
       (state) => state.auth
     )
 
@@ -25,39 +25,32 @@ const LoginForm = () => {
       email:"",
       password:"",
     })
-    
-    const token = localStorage.getItem("token")
-      console.log(token)
-
-      if (token) {
-        navigate('/profile')
-      }
 
     useEffect(() => {
-    
       if(isError){ 
-      toast.error(message)
+        toast.error(message)
+        dispatch(reset())
       }
 
       if (userInfos|| isSuccess) {
         navigate('/profile')
       }
-      dispatch(reset())
-    }, [userInfos,  isError, isSuccess, message, navigate, dispatch])
+      
+    }, [userInfos,  isError, isSuccess, message, navigate,token, dispatch])
    
 
     const handleSubmit=(e)=>{
         e.preventDefault()
         //console.log(datas)
         if(datas){
-        dispatch(login(datas))
+        dispatch(login(datas), handleRememberMe)
       }
     }
 
     const handleRememberMe= ()=>{
-      if(rememberMe){setRememberMe(false)}
-      if(!rememberMe){setRememberMe(true)}
-      console.log(rememberMe)
+          if(rememberMe){setRememberMe(false)}
+          if(!rememberMe){setRememberMe(true)}
+          console.log(rememberMe)
     }
 
 

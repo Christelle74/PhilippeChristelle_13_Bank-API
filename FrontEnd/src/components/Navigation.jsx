@@ -3,6 +3,7 @@ import { NavLink, Link } from 'react-router-dom'
 import { FaUserCircle } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
 import {logout, reset} from "../features/auth/authSlice"
+//import { useEffect } from 'react'
 
 
 /**
@@ -15,7 +16,7 @@ const Navigation = () => {
   const dispatch = useDispatch()
   const  {userInfos, isSuccess, firstName} = useSelector((state) => state.auth)
   
-  
+
   const onLogout = ()=>{ 
     dispatch(logout())
     dispatch(reset())

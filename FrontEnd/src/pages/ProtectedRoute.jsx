@@ -1,6 +1,5 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
 
 /**
@@ -9,14 +8,14 @@ import { useSelector } from 'react-redux'
  * @returns {JSX.Element} ProtectedRoute component
  */
  const ProtectedRoute = () => {
-
-  const {userInfos}= useSelector((state)=>state.auth)
-
-  if(!userInfos){
+  const token = localStorage.getItem("token")
+  console.log('token', token)
+  
+  if(!token){
     return (
       <Navigate to="/login"/>
     )
   }
-  return <Outlet/>
+  return <Outlet/>//restitue les routes enfants
 }
 export default ProtectedRoute

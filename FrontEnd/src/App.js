@@ -12,7 +12,6 @@ import Swagger from './pages/Swagger'
 
 
 const App = () => {
-  
   return (
     <>
     <Router>
@@ -21,7 +20,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile" element={<ProtectedRoute/>}> 
+        <Route  element={<ProtectedRoute/>}> 
           <Route path="/profile" element={<Profile />} />
         </Route>
         <Route path="/swagger" element={<Swagger/>} /> 
