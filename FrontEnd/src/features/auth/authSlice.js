@@ -3,26 +3,24 @@ import authService from './authService'
 
 
 //createSlice : methode d'assistance qui simplifie le processus de creation d'actions et de reducteurs
-//createAsyncThunk : ecrit la logique asynchrone
-
-//const token = localStorage.getItem("token") ? localStorage.getItem('token') : null
-
+//createAsyncThunk : ecrit la logique asynchrone, les paramètres sont : nom de la tranche/nom de l'action (auth/login)+fonction asynchrone
+//thunk : action creator 
+//Initiale state  : définir les propriétés d'état avec les valeurs initiales
 const initialState = {
   userInfos : null,
   isError: false,
-  isSuccess: false,
+  //isSuccess: false,
   isLoading: false,
   message: '',
   firstName:'',
   lastName:'',
-  //token,
 }
 
 // Login user : login  appelle le service login
-export const login = createAsyncThunk('auth/login', async (formData, thunkAPI) => {
+export const login = createAsyncThunk('auth/login', async (loginData, thunkAPI) => {
   try { 
     //console.log(formData)//ici on récupère l'email et le password
-    return await authService.login(formData)
+    return await authService.login(loginData)
     
   } catch (error) {
     const message =
@@ -78,13 +76,14 @@ export const authSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.isLoading = false
-      state.isSuccess = false
+      //state.isSuccess = false
       state.isError = false
       state.message = ""
       state.firstName = ""
       state.lastName = ""
     }
   },
+  //méthodes mettant à jour chacune des 3 étapes différentes des actions asynchrones (pending, fulfilled, rejected)
   extraReducers: (builder) => {
     builder
     //login
@@ -96,7 +95,6 @@ export const authSlice = createSlice({
         state.isLoading = false
         state.message=""
         state.userInfos = payload
-        //state.token =payload.body.token
       })
       .addCase(login.rejected, (state, {payload}) => {
         state.isLoading = false
@@ -107,7 +105,6 @@ export const authSlice = createSlice({
       //logout
       .addCase(logout.fulfilled, (state) => {
         state.userInfos = null
-        //state.token=null
       })
 
        //profile
@@ -116,7 +113,7 @@ export const authSlice = createSlice({
       })
       .addCase(userProfile.fulfilled, (state, {payload}) => {
         state.isLoading = false
-        state.isSuccess = true
+        //state.isSuccess = true
         state.isError=false
         state.message =''
         state.firstName = payload.firstName;
@@ -135,7 +132,7 @@ export const authSlice = createSlice({
       })
       .addCase(updateUserData.fulfilled, (state, {payload}) => {
         state.isLoading = false
-        state.isSuccess = true
+        //state.isSuccess = true
         state.firstName= payload.firstName;
         state.lastName = payload.lastName;
         state.isError=false

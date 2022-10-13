@@ -6,7 +6,6 @@ import { toast } from "react-toastify"
 import { login, reset} from "../features/auth/authSlice"
 import Loader from './Loader';
 
-
 /**
  * Creation of the login form for the signIn page
  * @component
@@ -16,43 +15,41 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {userInfos, isLoading,  isError, isSuccess,token, message} = useSelector(
+    const {userInfos,isLoading,  isError,  message} = useSelector(
       (state) => state.auth
     )
-
-    const [rememberMe, setRememberMe]= useState(true)
+    
     const [datas, setDatas] = useState({
       email:"",
       password:"",
+      rememberMe:false,
     })
 
     useEffect(() => {
+      //console.log(userInfos)
       if(isError){ 
         toast.error(message)
         dispatch(reset())
       }
-
-      if (userInfos|| isSuccess) {
+      // if(datas.rememberMe){
+      //   localStorage.setItem('token', userInfos.body.token);
+      //   navigate('/profile')
+      //   }
+      if(userInfos) {
+        localStorage.setItem('token', userInfos.body.token)
         navigate('/profile')
       }
       
-    }, [userInfos,  isError, isSuccess, message, navigate,token, dispatch])
+    }, [isError, message, userInfos, navigate, datas, dispatch])
    
 
     const handleSubmit=(e)=>{
         e.preventDefault()
-        //console.log(datas)
+        
         if(datas){
-        dispatch(login(datas), handleRememberMe)
-      }
+        dispatch(login(datas))
+        }
     }
-
-    const handleRememberMe= ()=>{
-          if(rememberMe){setRememberMe(false)}
-          if(!rememberMe){setRememberMe(true)}
-          console.log(rememberMe)
-    }
-
 
     return (
       <>
@@ -66,11 +63,11 @@ const LoginForm = () => {
                 <input type="password" id="password" name="password" required  onChange={(e)=>setDatas({...datas, password: e.target.value})}/>
             </div>
             <div className="inputRemember">
-                <input type="checkbox" id="remember-me" onClick={handleRememberMe}/>
+                <input type="checkbox" id="remember-me" onChange={(e)=>setDatas({...datas, rememberMe: e.target.checked})}/>
                 <label htmlFor="remember-me" >Remember me</label>
             </div>
             <button className="signInButton" type="submit">Sign In</button>
-            {isLoading && <><div className='error'>Utilisateur inexistant</div><Loader/></>}
+            {isLoading && <><div className='error'>Loading in progress....</div><Loader/></>}
         </form>
       </>
     );

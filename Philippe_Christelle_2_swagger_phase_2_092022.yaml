@@ -120,8 +120,8 @@ paths:
         - Bearer: []
       tags:
         - Transactions module
-      summary: Fetching user accounts
-      description: Get all user accounts 
+      summary: User Accounts API
+      description: API for fetching user accounts
       parameters:
         - in: header
           name: Authorization
@@ -134,58 +134,25 @@ paths:
         '200':
           description: User accounts retrieved successully
           schema:
-            $ref: '#/definitions/ApiAccountsResponse'
-        '404':
-          description: Accounts not found
+            $ref: '#/definitions/UserAccounts'
+        '400':
+          description: Invalid Fields
         '500':
-          description: Error on the server - Your request could not be completed 
-  /account${id}:
-    get:
-      security:
-        - Bearer: []
-      tags:
-        - Transactions module
-      summary: Fetching one user account
-      description: Get one user account
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-          type: string
-        - in: path
-          name: accountId
-          type: string
-          required: true
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: User account retrieved successully
-          schema:
-            $ref: '#/definitions/ApiOneAccountResponse'
-        '404':
-          description: Account not found
-        '500':
-          description: Error on the server - Your request could not be completed 
+          description: Internal Server Error
   /account${id}/transactions:
     get:
       security:
         - Bearer: []
       tags:
         - Transactions module
-      summary: Fetching user transactions
-      description: Get all transactions of a user's account
+      summary: Transactions API
+      description: API for fetching transactions
       parameters:
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
           required: true
           type: string
-        - in: path
-          name: accountId
-          type: string
-          required: true
       produces:
         - application/json
       responses:
@@ -193,46 +160,19 @@ paths:
           description: Transactions retrieved successfully
           schema:
             $ref: '#/definitions/ApiTransactionsResponse'
-        '404':
+        '400':
           description: Transactions not found
         '500':
-          description: Error on the server - Your request could not be completed 
+          description: Internal Server Error
+    
   /account${id}/transactions/transaction${id}:
-    get:
-      security:
-        - Bearer: []
-      tags:
-        - Transactions module
-      summary: Fetching one transaction
-      description: Get one user transaction
-      parameters:
-        - in: header
-          name: Authorization
-          description: Attach Bearer JWT token
-          required: true
-          type: string
-        - in: path
-          name: transactionId
-          type: number
-          required: true
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Transaction retrieved successfully
-          schema:
-            $ref: '#/definitions/ApiOneTransactionResponse'
-        '404':
-          description: Transaction not found
-        '500':
-          description: Error on the server - Your request could not be completed 
     patch:
       security:
         - Bearer: []
       tags:
         - Transactions module
-      summary: Updating a transaction
-      description: User can update a transaction's note or category
+      summary: Transactions API
+      description: Update a transaction's description
       parameters:
         - in: header
           name: Authorization
@@ -253,13 +193,16 @@ paths:
         - application/json
       responses:
         '200':
-          description: Transaction updated successfully
+          description: transaction updated successfully
           schema:
-            $ref: '#/definitions/ApiOneTransactionResponse'
+            $ref: '#/definitions/ApiTransactionsResponse'
         '400':
           description: Invalid Fields
         '500':
-          description: Error on the server - Your request could not be completed 
+          description: Internal Server Error
+
+
+
 
           
 securityDefinitions:
@@ -317,48 +260,24 @@ definitions:
       lastName:
         type: string
 
-  Account:
+  UserAccounts:
     type: object
     properties:
-      accountId:
-        type: string
-        example: ABchecking123
-      name:
-        type: string
-        example: ArgentBank checking
-      balance:
-        type: number
-      description:
-        type: string 
-  ApiAccountsResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
       accounts:
         type: array
         items:
-          $ref: "#/definitions/Account" 
-  ApiOneAccountResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      account:
-        type: object
-        properties: 
-          accountId:
-            type: string
-          name:
-            type: string
-          balance:
-            type: number
-          description:
-            type: string 
+          type: object
+          properties:
+            accountId:
+              type: string
+              example: ABchecking123
+            name:
+              type: 
+              example: ArgentBank checking
+            balance:
+              type: number
+            description:
+              type: string   
   Transaction:
     type: object
     properties:
@@ -393,36 +312,8 @@ definitions:
         type: integer
       message:
         type: string
-      transactions:
-        type: array
-        items:
-          $ref: "#/definitions/Transaction"
-  ApiOneTransactionResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      transaction:
-        type: object
-        properties:
-          id:
-            type: string
-          date:
-            type: string
-          description:
-            type: string
-          amount:
-            type: number
-          balance:
-            type: number
-          transactionType:
-            type: string
-          category:
-            type: string
-          note:
-            type: string
+      body:
+        $ref: "#/definitions/Transaction"
   TransactionUpdate:
     type: object
     properties:
