@@ -16,39 +16,32 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {isLoading, isError, token} = useSelector(
+    const {isLoading, isError, isSuccess, rememberMe, token} = useSelector(
       (state) => state.auth
     )
-    //const [rememberMe, setRememberMe]=useState(false)
+    
 
     useEffect(() => {
-      if(token) {
-       //console.log(token)
+      if(isSuccess) {
+       console.log(isSuccess)
         navigate('/profile')
       }
-    }, [token,navigate])
+    }, [isSuccess,navigate])
    
     const handleRememberMe =(e)=>{
-      console.log(e.currentTarget.checked)
-      e.currentTarget.checked ? dispatch(isRememberMe(true)) : dispatch(isRememberMe(false))
-     
+      //console.log(e.target.checked)
+      dispatch(isRememberMe(e.target.checked))
     }
 
     const submitForm=(datas)=>{
-      console.log(datas)
-      // if(rememberMe===true){
-      // localStorage.setItem('email',datas.email)
-    
+      //console.log(datas)
       dispatch(login(datas))
     }
 
-
-    //console.log(rememberMe)
-    // if(rememberMe===true){
-    //   localStorage.setItem('token', token)
-    // } else {sessionStorage.setItem('token', token)}
-
-    
+    if(rememberMe===true){
+      localStorage.setItem('token', token)
+    }
+   
 
     return (
       <>
@@ -56,14 +49,14 @@ const LoginForm = () => {
           {isError && <div>Connexion error </div>}
             <div className="inputWrapper">
                 <label htmlFor="email">Username</label>
-                <input type="email" id="email" name='email' {...register('email', {required: true})} /> 
+                <input type="email" id="email" name='email'  {...register('email', {required: true})} /> 
                 </div>
             <div className="inputWrapper">
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" name="password" {...register('password', {required: true})}  />
                 </div>
             <div className="inputRemember">
-                <input type="checkbox" id="remember-me" onChange={handleRememberMe}/>
+                <input type="checkbox" id="remember-me"  onChange={handleRememberMe}/>
                 <label htmlFor="remember-me" >Remember me</label>
             </div>
             <button className="signInButton" type="submit">Sign In</button>

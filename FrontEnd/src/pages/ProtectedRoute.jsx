@@ -10,11 +10,10 @@ import { Navigate, Outlet } from 'react-router-dom'
  */
 const ProtectedRoute = () => {
   
-  //on vérifie que l'utilisateur existe avant d'accorder l'accès à sa page
-  const {isSuccess}= useSelector((state)=> state.auth)
-  //console.log(userInfos)
+  //on vérifie que le token existe avant d'accorder l'accès à sa page
+  const {token}= useSelector((state)=> state.auth)
   
-  if(!isSuccess){ 
+  if(!token){ 
     return (
       <Navigate to="/login"/>
     )

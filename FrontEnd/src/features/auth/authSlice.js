@@ -13,14 +13,13 @@ const token = localStorage.getItem('token') ? localStorage.getItem("token") : nu
 //thunkAPi : action creator, contient des paramètres comme 'getstate, dispatch, rejectwithvalue' 
 //Initiale state  : définir les propriétés d'état avec les valeurs initiales
 const initialState = {
-  userInfos : null,
   isError: null,
   isSuccess: false,
   isLoading: false,
   token,
   firstName:'',
   lastName:'',
-  rememberMe: false
+  rememberMe: false,
 }
 
 // Login user : login  appelle le service login
@@ -44,6 +43,7 @@ export const userProfile = createAsyncThunk('auth/userProfile', async (profileDa
   try {
     const token = getState().auth.userInfos.body.token ;
     //console.log(token)
+    
     return await authService.userProfile(profileData, token)
   }catch (error) {
     const message =
@@ -79,17 +79,17 @@ export const authSlice = createSlice({
       localStorage.removeItem('token')
       localStorage.clear()
       state.isLoading=false
-      state.userInfos= null
       state.token= null
       state.isError= null
       state.firstName=''
       state.lastName=''
       state.isSuccess= false
+      state.rememberMe=false
     },
 
-    IsRememberMe : (state, {payload})=> {
-      state.rememberMe = payload
-    }
+    isRememberMe : (state, {payload})=> {
+       state.rememberMe = payload
+     },
   },
   //méthodes mettant à jour chacune des 3 étapes différentes des actions asynchrones (pending, fulfilled, rejected)
   extraReducers: (builder) => {
@@ -101,7 +101,6 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, {payload}) => {
         state.isLoading = false
-        state.userInfos = payload
         state.token = payload.body.token
         state.isSuccess= true
       })
@@ -121,7 +120,7 @@ export const authSlice = createSlice({
         state.firstName = payload.firstName;
         state.lastName = payload.lastName;
       })
-      .addCase(userProfile.rejected, (state, {payload}) => {
+      .addCase(userProfile.rejected, (state) => {
         state.isLoading = false
       })
       
@@ -144,6 +143,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { logout, isRememberMe } = authSlice.actions
+export const { logout, isRememberMe, getEmail } = authSlice.actions
 export default authSlice.reducer
 

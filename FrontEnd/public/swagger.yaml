@@ -139,7 +139,7 @@ paths:
           description: Accounts not found
         '500':
           description: Error on the server - Your request could not be completed 
-  /account${id}:
+  /account/{id}:
     get:
       security:
         - Bearer: []
@@ -168,13 +168,13 @@ paths:
           description: Account not found
         '500':
           description: Error on the server - Your request could not be completed 
-  /account${id}/transactions:
+  /account/{id}/transactions:
     get:
       security:
         - Bearer: []
       tags:
         - Transactions module
-      summary: Fetching user transactions
+      summary: Fetching user one account's transactions
       description: Get all transactions of a user's account
       parameters:
         - in: header
@@ -197,7 +197,7 @@ paths:
           description: Transactions not found
         '500':
           description: Error on the server - Your request could not be completed 
-  /account${id}/transactions/transaction${id}:
+  /transaction/{id}:
     get:
       security:
         - Bearer: []

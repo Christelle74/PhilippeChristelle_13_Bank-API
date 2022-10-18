@@ -14,17 +14,17 @@ const Profile = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const {token,  firstName, lastName, } = useSelector((state)=> state.auth)
+    const {isSuccess,  firstName, lastName, } = useSelector((state)=> state.auth)
     const authFirstName =useSelector((state)=>state.auth.firstName)
     const authLastName =useSelector((state)=>state.auth.lastName)
         
 
     useEffect(()=>{
-      if(!token){
+      if(!isSuccess){
         navigate ('/login')
       }
       dispatch(userProfile())
-    }, [token,  navigate, dispatch])
+    }, [isSuccess,  navigate, dispatch])
 
 
     //Edit form mode
