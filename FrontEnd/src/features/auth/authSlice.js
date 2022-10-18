@@ -1,42 +1,48 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
 
+//initialize token from local storage
+const token = localStorage.getItem('token') ? localStorage.getItem("token") : null
+//console.log(token)
 
+//Jwt ou JSON web token gère l'authentification et le controle d'accès côté client (système de sécurité)
 //createSlice : methode d'assistance qui simplifie le processus de creation d'actions et de reducteurs
-//createAsyncThunk : ecrit la logique asynchrone, les paramètres sont : nom de la tranche/nom de l'action (auth/login)+fonction asynchrone
-//thunk : action creator 
+//slice : collection de logique et d'actions de reducer pour une fonctionnalité
+//createAsyncThunk : API qui envoie les requêtes asynchrones au backend, les paramètres sont : nom de la tranche/nom de l'action (auth/login)+fonction asynchrone
+//createAsyncThunk génère les 3 types d'action de cyle de vie pending, fulfilled et rejected
+//thunkAPi : action creator, contient des paramètres comme 'getstate, dispatch, rejectwithvalue' 
 //Initiale state  : définir les propriétés d'état avec les valeurs initiales
 const initialState = {
   userInfos : null,
-  isError: false,
-  //isSuccess: false,
+  isError: null,
+  isSuccess: false,
   isLoading: false,
-  message: '',
+  token,
   firstName:'',
   lastName:'',
+  rememberMe: false
 }
 
 // Login user : login  appelle le service login
-export const login = createAsyncThunk('auth/login', async (loginData, thunkAPI) => {
+export const login = createAsyncThunk('auth/login', async ({email, password}, {rejectWithValue}) => {
   try { 
-    //console.log(formData)//ici on récupère l'email et le password
-    return await authService.login(loginData)
+    //console.log(email, password)//ici on récupère l'email et le password
+    return await authService.login({email, password})
     
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString()
-    return thunkAPI.rejectWithValue(message)
+    return rejectWithValue(message)
   }
 })
 
 
  //profile user
- //createAsyncThunk génère les 3 types d'action de cyle de vie pending, fulfilled et rejected
-export const userProfile = createAsyncThunk('auth/userProfile', async (profileData, thunkAPI)=>{
+export const userProfile = createAsyncThunk('auth/userProfile', async (profileData, {getState, rejectWithValue})=>{
   try {
-    const token = thunkAPI.getState().auth.userInfos.body.token ;
+    const token = getState().auth.userInfos.body.token ;
     //console.log(token)
     return await authService.userProfile(profileData, token)
   }catch (error) {
@@ -44,7 +50,7 @@ export const userProfile = createAsyncThunk('auth/userProfile', async (profileDa
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString()
-    return thunkAPI.rejectWithValue(message)
+    return rejectWithValue(message)
   }
 })
 
@@ -63,24 +69,26 @@ export const updateUserData = createAsyncThunk('auth/updateUserData', async (new
   }
 })
 
-//logout
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout()
-})
 
-
-
+// createSlice gère les changements d'état
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false
-      //state.isSuccess = false
-      state.isError = false
-      state.message = ""
-      state.firstName = ""
-      state.lastName = ""
+    logout :(state)=> {
+      localStorage.removeItem('token')
+      localStorage.clear()
+      state.isLoading=false
+      state.userInfos= null
+      state.token= null
+      state.isError= null
+      state.firstName=''
+      state.lastName=''
+      state.isSuccess= false
+    },
+
+    IsRememberMe : (state, {payload})=> {
+      state.rememberMe = payload
     }
   },
   //méthodes mettant à jour chacune des 3 étapes différentes des actions asynchrones (pending, fulfilled, rejected)
@@ -89,40 +97,32 @@ export const authSlice = createSlice({
     //login
       .addCase(login.pending, (state) => {
         state.isLoading = true
-        state.isError=false
+        state.isError=null
       })
       .addCase(login.fulfilled, (state, {payload}) => {
         state.isLoading = false
-        state.message=""
         state.userInfos = payload
+        state.token = payload.body.token
+        state.isSuccess= true
       })
       .addCase(login.rejected, (state, {payload}) => {
         state.isLoading = false
-        state.isError = true
-        state.message = payload
+        state.isError = payload
       })
 
-      //logout
-      .addCase(logout.fulfilled, (state) => {
-        state.userInfos = null
-      })
-
-       //profile
+       //user profile
       .addCase(userProfile.pending, (state) => {
         state.isLoading = true
       })
       .addCase(userProfile.fulfilled, (state, {payload}) => {
         state.isLoading = false
-        //state.isSuccess = true
-        state.isError=false
-        state.message =''
+        state.isSuccess = true
+        state.isError=null
         state.firstName = payload.firstName;
         state.lastName = payload.lastName;
       })
       .addCase(userProfile.rejected, (state, {payload}) => {
         state.isLoading = false
-        state.isError = true
-        state.message = payload
       })
       
 
@@ -132,20 +132,18 @@ export const authSlice = createSlice({
       })
       .addCase(updateUserData.fulfilled, (state, {payload}) => {
         state.isLoading = false
-        //state.isSuccess = true
+        state.isSuccess = true
         state.firstName= payload.firstName;
         state.lastName = payload.lastName;
-        state.isError=false
-        state.message =''
+        state.isError=null
       })
       .addCase(updateUserData.rejected, (state, {payload}) => {
         state.isLoading = false
-        state.isError = true
-        state.message = payload
+        state.isError = payload
       })
   },
 })
 
-export const { reset } = authSlice.actions
+export const { logout, isRememberMe } = authSlice.actions
 export default authSlice.reducer
 

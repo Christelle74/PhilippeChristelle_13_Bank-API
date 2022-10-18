@@ -1,9 +1,9 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form'
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from "react-toastify"
-import { login, reset} from "../features/auth/authSlice"
+import { login,  isRememberMe } from "../features/auth/authSlice"
 import Loader from './Loader';
 
 /**
@@ -12,62 +12,62 @@ import Loader from './Loader';
  * @returns {JSX.Element} LoginForm component
  */
 const LoginForm = () => {
+    const { register, handleSubmit } = useForm()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {userInfos,isLoading,  isError,  message} = useSelector(
+    const {isLoading, isError, token} = useSelector(
       (state) => state.auth
     )
-    
-    const [datas, setDatas] = useState({
-      email:"",
-      password:"",
-      rememberMe:false,
-    })
+    //const [rememberMe, setRememberMe]=useState(false)
 
     useEffect(() => {
-      //console.log(userInfos)
-      if(isError){ 
-        toast.error(message)
-        dispatch(reset())
-      }
-      // if(datas.rememberMe){
-      //   localStorage.setItem('token', userInfos.body.token);
-      //   navigate('/profile')
-      //   }
-      if(userInfos) {
-        localStorage.setItem('token', userInfos.body.token)
+      if(token) {
+       //console.log(token)
         navigate('/profile')
       }
-      
-    }, [isError, message, userInfos, navigate, datas, dispatch])
+    }, [token,navigate])
    
-
-    const handleSubmit=(e)=>{
-        e.preventDefault()
-        
-        if(datas){
-        dispatch(login(datas))
-        }
+    const handleRememberMe =(e)=>{
+      console.log(e.currentTarget.checked)
+      e.currentTarget.checked ? dispatch(isRememberMe(true)) : dispatch(isRememberMe(false))
+     
     }
+
+    const submitForm=(datas)=>{
+      console.log(datas)
+      // if(rememberMe===true){
+      // localStorage.setItem('email',datas.email)
+    
+      dispatch(login(datas))
+    }
+
+
+    //console.log(rememberMe)
+    // if(rememberMe===true){
+    //   localStorage.setItem('token', token)
+    // } else {sessionStorage.setItem('token', token)}
+
+    
 
     return (
       <>
-        <form className='form'  onSubmit={handleSubmit}>
+        <form className='form'  onSubmit={handleSubmit(submitForm)}>
+          {isError && <div>Connexion error </div>}
             <div className="inputWrapper">
                 <label htmlFor="email">Username</label>
-                <input type="email" id="email" name='email' required   onChange={(e)=>setDatas({...datas, email: e.target.value})}/>
-            </div>
+                <input type="email" id="email" name='email' {...register('email', {required: true})} /> 
+                </div>
             <div className="inputWrapper">
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" name="password" required  onChange={(e)=>setDatas({...datas, password: e.target.value})}/>
-            </div>
+                <input type="password" id="password" name="password" {...register('password', {required: true})}  />
+                </div>
             <div className="inputRemember">
-                <input type="checkbox" id="remember-me" onChange={(e)=>setDatas({...datas, rememberMe: e.target.checked})}/>
+                <input type="checkbox" id="remember-me" onChange={handleRememberMe}/>
                 <label htmlFor="remember-me" >Remember me</label>
             </div>
             <button className="signInButton" type="submit">Sign In</button>
-            {isLoading && <><div className='error'>Loading in progress....</div><Loader/></>}
+            {isLoading && <><div className='error'>Unexistant user....</div><Loader/></>}
         </form>
       </>
     );

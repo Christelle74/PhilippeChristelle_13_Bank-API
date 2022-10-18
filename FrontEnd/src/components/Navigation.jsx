@@ -2,8 +2,9 @@ import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { FaUserCircle } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
-import {logout, reset} from "../features/auth/authSlice"
-//import { useEffect } from 'react'
+import {logout} from "../features/auth/authSlice"
+
+
 
 
 /**
@@ -14,12 +15,10 @@ import {logout, reset} from "../features/auth/authSlice"
 
 const Navigation = () => {
   const dispatch = useDispatch()
-  const  {userInfos, isSuccess, firstName} = useSelector((state) => state.auth)
-  
+  const  {isSuccess, firstName} = useSelector((state) => state.auth)
 
   const onLogout = ()=>{ 
     dispatch(logout())
-    dispatch(reset())
   }
   
   return (
@@ -33,7 +32,7 @@ const Navigation = () => {
         <h1 className="sr-only">Argent Bank</h1>
       </NavLink>
       <div className="mainNavItem">
-        {userInfos && isSuccess ? ( 
+        {isSuccess ? ( 
           <>
             <div className="mainNavItem">
               <FaUserCircle className="fa" />

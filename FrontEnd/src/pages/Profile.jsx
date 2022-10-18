@@ -1,8 +1,7 @@
 import React, {useEffect} from 'react'
 import AccountItem from '../components/AccountItem'
 import { useDispatch, useSelector} from 'react-redux'
-import { toast } from 'react-toastify'
-import { userProfile, updateUserData, reset} from "../features/auth/authSlice"
+import { userProfile, updateUserData} from "../features/auth/authSlice"
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,22 +14,18 @@ const Profile = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const {userInfos,message, firstName, lastName, isError, } = useSelector((state)=> state.auth)
+    const {token,  firstName, lastName, } = useSelector((state)=> state.auth)
     const authFirstName =useSelector((state)=>state.auth.firstName)
     const authLastName =useSelector((state)=>state.auth.lastName)
         
 
     useEffect(()=>{
-      if(isError){
-        toast.error(message);
-        dispatch(reset())
-        }
-      if(!userInfos){
+      if(!token){
         navigate ('/login')
       }
-       
       dispatch(userProfile())
-    }, [userInfos,  isError, message,firstName, lastName, navigate, dispatch])
+    }, [token,  navigate, dispatch])
+
 
     //Edit form mode
     const [editNameForm, setEditNameForm] = useState(false)
@@ -46,7 +41,6 @@ const Profile = () => {
     const [updateFirstName, setUpdateFirstName] = useState("");
 	  const [updateLastName, setUpdateLastName] = useState("");
     
-
     const onSave=(e)=>{
       e.preventDefault()
       const userUpdateData= {
@@ -58,7 +52,7 @@ const Profile = () => {
       setEditNameForm((current)=>!current)
       setEditBackground((current)=>!current)
     }
-
+    
 
   return (
     <div className={editBackground? "main bgLight" : "main bgDark"}>
