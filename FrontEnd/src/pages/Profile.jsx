@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 /**
- * Display the profile page with account elements
+ * Display the profile page with account elements and access to edit form
  * @component
  * @returns {JSX.Element} Profile component
  */

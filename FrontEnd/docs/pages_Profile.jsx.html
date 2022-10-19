@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccountItem">AccountItem</a></li><li><a href="global.html#API">API</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#Feature">Feature</a></li><li><a href="global.html#Features">Features</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProtectedRoute">ProtectedRoute</a></li><li><a href="global.html#store">store</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccountItem">AccountItem</a></li><li><a href="global.html#API">API</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#Feature">Feature</a></li><li><a href="global.html#Features">Features</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProtectedRoute">ProtectedRoute</a></li></ul>
 </nav>
 
 <div id="main">
@@ -44,52 +44,48 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React, {useEffect} from 'react'
 import AccountItem from '../components/AccountItem'
-//import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector} from 'react-redux'
-import { toast } from 'react-toastify'
-import { userProfile, updateUserData, reset} from "../features/auth/authSlice"
+import { userProfile, updateUserData} from "../features/auth/authSlice"
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 /**
- * Display the profile page with account elements
+ * Display the profile page with account elements and access to edit form
  * @component
  * @returns {JSX.Element} Profile component
  */
 const Profile = () => {
     const dispatch = useDispatch()
-    //const navigate = useNavigate()
+    const navigate = useNavigate()
 
-    const {userInfos,message, firstName, lastName, isError, } = useSelector((state)=> state.auth)
+    const {isSuccess,  firstName, lastName } = useSelector((state)=> state.auth)
     const authFirstName =useSelector((state)=>state.auth.firstName)
     const authLastName =useSelector((state)=>state.auth.lastName)
         
 
     useEffect(()=>{
-      if(isError){
-        toast.error(message);
-        dispatch(reset())
-        }
-
+      if(!isSuccess){
+        navigate ('/login')
+      }
+      navigate ('/profile')
       dispatch(userProfile())
-    }, [userInfos,  isError, message,firstName, lastName, dispatch])
+    }, [isSuccess, navigate, dispatch])
+
 
     //Edit form mode
-    const [editNameForm, setEditNameForm] = useState('')
-    const [editBackground, setEditBackground] =useState('')
+    const [editNameForm, setEditNameForm] = useState(false)
+    const [editBackground, setEditBackground] =useState(false)
 
     const editForm=(e)=>{
       e.preventDefault()
       setEditNameForm((current)=>!current)
       setEditBackground((current)=>!current)
-      // if(!editNameForm){setEditNameForm(true)}
-      // if(!editBackground){setEditBackground(true)}
     }
 
     //form values
     const [updateFirstName, setUpdateFirstName] = useState("");
 	  const [updateLastName, setUpdateLastName] = useState("");
     
-
     const onSave=(e)=>{
       e.preventDefault()
       const userUpdateData= {
@@ -101,7 +97,7 @@ const Profile = () => {
       setEditNameForm((current)=>!current)
       setEditBackground((current)=>!current)
     }
-
+    
 
   return (
     &lt;div className={editBackground? "main bgLight" : "main bgDark"}>
@@ -114,9 +110,9 @@ const Profile = () => {
               &lt;form className='userForm'>
                 &lt;div className="inputWrapper">
                     &lt;label htmlFor="firstName">&lt;/label>
-                    &lt;input type="text" id="firstName" name='firstName' placeholder='FirstName' required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
+                    &lt;input type="text" id="firstName" name='firstName' placeholder={firstName} required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
                     &lt;label htmlFor="lastName">&lt;/label>
-                    &lt;input type="text" id="lastName" name="lastName" placeholder='LastName' required onChange={(e)=>setUpdateLastName(e.target.value)}/>
+                    &lt;input type="text" id="lastName" name="lastName" placeholder={lastName} required onChange={(e)=>setUpdateLastName(e.target.value)}/>
                 &lt;/div>
                 
                 &lt;div className="userButtons">
@@ -173,7 +169,7 @@ export default Profile
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 04 2022 15:26:09 GMT+0200 (heure d’été d’Europe centrale) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Wed Oct 19 2022 11:01:27 GMT+0200 (heure d’été d’Europe centrale) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

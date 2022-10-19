@@ -10,12 +10,12 @@ const API_URL = 'http://localhost:3001/api/v1/user/'
 // le BackEnd renverra un JWT après une authentification réussie , permet d'accéder aux infos du backend
 const login = async ({email, password}) => {
     return  await axios.post(API_URL + 'login', {email, password})
-    .then((res) => {
-        console.log(res.data)//renvoi la réponse du serveur avec status, message et body
-        //console.log(email, password)//retourne bien l'email et le password 
-        return res.data
-    })
-    .catch((error)=>console.log(error))
+        .then((res) => {
+            //console.log(res.data)//renvoi la réponse du serveur avec status, message et body
+            //console.log(email, password)//retourne bien l'email et le password 
+            return res.data
+        })
+        .catch((error)=>console.log(error))
 }
 
 
@@ -28,8 +28,7 @@ const userProfile = async(profileData, token)=>{
     }
     return await axios.post(API_URL + 'profile', profileData, config)
         .then((res)=> {
-            console.log(profileData)
-            console.log(res.data.body)//retourne les infos du user nom, prenom, mail...
+            //console.log(res.data.body)//retourne les infos du user nom, prenom, mail...
             return res.data.body})
         .catch((error)=>console.log(error))
 }
@@ -41,9 +40,9 @@ const updateUserData =async(newData, token)=>{
             Authorization:`Bearer ${token}`
         }
     }
-        return await axios.put(API_URL + 'profile', newData, config)
+    return await axios.put(API_URL + 'profile', newData, config)
         .then((res)=>{
-            console.log(res.data.body)//retourne nom prénom mis à jour
+            //console.log(res.data.body)//retourne nom prénom mis à jour
             return res.data.body})
         .catch((error)=>console.log(error))
 }

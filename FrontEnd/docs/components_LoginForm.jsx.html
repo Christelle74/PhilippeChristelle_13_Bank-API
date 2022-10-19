@@ -27,7 +27,7 @@
 
 <nav >
     
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccountItem">AccountItem</a></li><li><a href="global.html#API">API</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#Feature">Feature</a></li><li><a href="global.html#Features">Features</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProtectedRoute">ProtectedRoute</a></li><li><a href="global.html#store">store</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AccountItem">AccountItem</a></li><li><a href="global.html#API">API</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#Feature">Feature</a></li><li><a href="global.html#Features">Features</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginPage">LoginPage</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ProtectedRoute">ProtectedRoute</a></li></ul>
 </nav>
 
 <div id="main">
@@ -43,13 +43,12 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React from 'react';
-import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form'
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from "react-toastify"
-import { login, reset} from "../features/auth/authSlice"
+import { login,  isRememberMe } from "../features/auth/authSlice"
 import Loader from './Loader';
-
 
 /**
  * Creation of the login form for the signIn page
@@ -57,68 +56,53 @@ import Loader from './Loader';
  * @returns {JSX.Element} LoginForm component
  */
 const LoginForm = () => {
+    const { register, handleSubmit } = useForm()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {userInfos, isLoading,  isError, isSuccess, message} = useSelector(
+    const {isLoading, isError, isSuccess, rememberMe, token} = useSelector(
       (state) => state.auth
     )
-
-    const [rememberMe, setRememberMe]= useState(true)
-    const [datas, setDatas] = useState({
-      email:"",
-      password:"",
-    })
     
 
     useEffect(() => {
-      if(isError){ 
-      toast.error(message)
-      }
-
-      if (userInfos|| isSuccess) {
+      if(isSuccess) {
         navigate('/profile')
       }
-
-      if(!userInfos){
-        Loader()
-      }
-      dispatch(reset())
-    }, [userInfos,  isError, isSuccess, message, navigate, dispatch])
+    }, [isSuccess,navigate])
    
-
-    const handleSubmit=(e)=>{
-        e.preventDefault()
-        //console.log(datas)
-        if(datas){
-        dispatch(login(datas))
-      }
+    const handleRememberMe =(e)=>{
+      dispatch(isRememberMe(e.target.checked))
     }
 
-    const handleRememberMe= ()=>{
-      if(rememberMe){setRememberMe(false)}
-      if(!rememberMe){setRememberMe(true)}
-      console.log(rememberMe)
+    const submitForm=(datas)=>{
+      //console.log(datas)
+      dispatch(login(datas))
     }
 
+    if(rememberMe===true){
+      localStorage.setItem('token', token)
+    }
+   
 
     return (
       &lt;>
-        &lt;form className='form'  onSubmit={handleSubmit}>
+        &lt;form className='form'  onSubmit={handleSubmit(submitForm)}>
+          {isError &amp;&amp; &lt;div>Connexion error &lt;/div>}
             &lt;div className="inputWrapper">
                 &lt;label htmlFor="email">Username&lt;/label>
-                &lt;input type="email" id="email" name='email' required   onChange={(e)=>setDatas({...datas, email: e.target.value})}/>
-            &lt;/div>
+                &lt;input type="email" id="email" name='email'  {...register('email', {required: true})} /> 
+                &lt;/div>
             &lt;div className="inputWrapper">
                 &lt;label htmlFor="password">Password&lt;/label>
-                &lt;input type="password" id="password" name="password" required  onChange={(e)=>setDatas({...datas, password: e.target.value})}/>
-            &lt;/div>
+                &lt;input type="password" id="password" name="password" {...register('password', {required: true})}  />
+                &lt;/div>
             &lt;div className="inputRemember">
-                &lt;input type="checkbox" id="remember-me" onClick={handleRememberMe}/>
+                &lt;input type="checkbox" id="remember-me"  onChange={handleRememberMe}/>
                 &lt;label htmlFor="remember-me" >Remember me&lt;/label>
             &lt;/div>
             &lt;button className="signInButton" type="submit">Sign In&lt;/button>
-            {isLoading &amp;&amp; &lt;>&lt;div className='error'>Utilisateur inexistant&lt;/div>&lt;Loader/>&lt;/>}
+            {isLoading &amp;&amp; &lt;>&lt;div className='error'>Unexistant user....&lt;/div>&lt;Loader/>&lt;/>}
         &lt;/form>
       &lt;/>
     );
@@ -138,7 +122,7 @@ export default LoginForm;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 04 2022 15:26:09 GMT+0200 (heure d’été d’Europe centrale) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Wed Oct 19 2022 11:01:27 GMT+0200 (heure d’été d’Europe centrale) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
 
-//initialize token from local storage
-const token = localStorage.getItem('token') ? localStorage.getItem("token") : null
-console.log(token)
 
 //Jwt ou JSON web token gère l'authentification et le controle d'accès côté client (système de sécurité)
 //createSlice : methode d'assistance qui simplifie le processus de creation d'actions et de reducteurs
@@ -12,6 +9,13 @@ console.log(token)
 //createAsyncThunk génère les 3 types d'action de cyle de vie pending, fulfilled et rejected
 //thunkAPi : action creator, contient des paramètres comme 'getstate, dispatch, rejectwithvalue' 
 //Initiale state  : définir les propriétés d'état avec les valeurs initiales
+
+
+
+//initialize token from local storage
+const token = localStorage.getItem('token') ? localStorage.getItem("token") : null
+//console.log(token)
+
 const initialState = {
   isError: null,
   isSuccess: false,

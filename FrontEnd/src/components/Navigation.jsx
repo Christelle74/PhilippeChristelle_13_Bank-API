@@ -8,7 +8,7 @@ import {logout} from "../features/auth/authSlice"
 
 
 /**
- * Creation of the navigation barre or header
+ * Creation of the navigation barre 
  * @component
  * @returns {JSX.Element} Navigation component
  */

@@ -23,13 +23,11 @@ const LoginForm = () => {
 
     useEffect(() => {
       if(isSuccess) {
-       console.log(isSuccess)
         navigate('/profile')
       }
     }, [isSuccess,navigate])
    
     const handleRememberMe =(e)=>{
-      //console.log(e.target.checked)
       dispatch(isRememberMe(e.target.checked))
     }
 
