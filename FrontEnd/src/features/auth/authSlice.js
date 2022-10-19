@@ -3,7 +3,7 @@ import authService from './authService'
 
 //initialize token from local storage
 const token = localStorage.getItem('token') ? localStorage.getItem("token") : null
-//console.log(token)
+console.log(token)
 
 //Jwt ou JSON web token gère l'authentification et le controle d'accès côté client (système de sécurité)
 //createSlice : methode d'assistance qui simplifie le processus de creation d'actions et de reducteurs
@@ -41,9 +41,9 @@ export const login = createAsyncThunk('auth/login', async ({email, password}, {r
  //profile user
 export const userProfile = createAsyncThunk('auth/userProfile', async (profileData, {getState, rejectWithValue})=>{
   try {
-    const token = getState().auth.userInfos.body.token ;
-    //console.log(token)
-    
+    //console.log(getState())
+    const token = getState().auth.token ;
+       
     return await authService.userProfile(profileData, token)
   }catch (error) {
     const message =
@@ -57,8 +57,8 @@ export const userProfile = createAsyncThunk('auth/userProfile', async (profileDa
 //update user profile data
 export const updateUserData = createAsyncThunk('auth/updateUserData', async (newData, thunkAPI)=>{
   try {
-    const token = thunkAPI.getState().auth.userInfos.body.token;
-    //console.log(token)
+    const token = thunkAPI.getState().auth.token;
+  
     return await authService.updateUserData(newData, token)
   }catch (error) {
     const message =

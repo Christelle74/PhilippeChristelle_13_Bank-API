@@ -12,7 +12,7 @@ const ProtectedRoute = () => {
   
   //on vérifie que le token existe avant d'accorder l'accès à sa page
   const {token}= useSelector((state)=> state.auth)
-  
+  console.log(token)
   if(!token){ 
     return (
       <Navigate to="/login"/>

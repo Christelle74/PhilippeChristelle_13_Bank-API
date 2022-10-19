@@ -15,7 +15,7 @@ import {logout} from "../features/auth/authSlice"
 
 const Navigation = () => {
   const dispatch = useDispatch()
-  const  {isSuccess, firstName} = useSelector((state) => state.auth)
+  const  {token, firstName} = useSelector((state) => state.auth)
 
   const onLogout = ()=>{ 
     dispatch(logout())
@@ -32,7 +32,7 @@ const Navigation = () => {
         <h1 className="sr-only">Argent Bank</h1>
       </NavLink>
       <div className="mainNavItem">
-        {isSuccess ? ( 
+        {token ? ( 
           <>
             <div className="mainNavItem">
               <FaUserCircle className="fa" />
