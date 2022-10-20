@@ -14,18 +14,18 @@ const Profile = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const {isSuccess,  firstName, lastName } = useSelector((state)=> state.auth)
+    const {token,  firstName, lastName } = useSelector((state)=> state.auth)
     const authFirstName =useSelector((state)=>state.auth.firstName)
     const authLastName =useSelector((state)=>state.auth.lastName)
         
 
     useEffect(()=>{
-      if(!isSuccess){
+      if(!token){
         navigate ('/login')
       }
       navigate ('/profile')
       dispatch(userProfile())
-    }, [isSuccess, navigate, dispatch])
+    }, [token, navigate, dispatch])
 
 
     //Edit form mode
@@ -34,24 +34,25 @@ const Profile = () => {
 
     const editForm=(e)=>{
       e.preventDefault()
-      setEditNameForm((current)=>!current)
-      setEditBackground((current)=>!current)
+      setEditNameForm(!editNameForm)
+      setEditBackground(!editBackground)
     }
 
     //form values
-    const [updateFirstName, setUpdateFirstName] = useState("");
-	  const [updateLastName, setUpdateLastName] = useState("");
+    const [updateUserName, setUpdateUserName]=useState({firstName:'', lastName:''})
     
+    const inputHandle = (e) => {
+      setUpdateUserName(() => ({
+        ...updateUserName,
+        [e.target.name]: e.target.value,
+      }))
+    }
     const onSave=(e)=>{
       e.preventDefault()
-      const userUpdateData= {
-        firstName: updateFirstName? updateFirstName: firstName,
-        lastName: updateLastName ? updateLastName : lastName,
-      }
-      dispatch(updateUserData(userUpdateData))
-      console.log(userUpdateData)
-      setEditNameForm((current)=>!current)
-      setEditBackground((current)=>!current)
+      dispatch(updateUserData(updateUserName))
+      console.log(updateUserName)
+      setEditNameForm()
+      setEditBackground()
     }
     
 
@@ -66,9 +67,9 @@ const Profile = () => {
               <form className='userForm'>
                 <div className="inputWrapper">
                     <label htmlFor="firstName"></label>
-                    <input type="text" id="firstName" name='firstName' placeholder={firstName} required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
+                    <input type="text" id="firstName" name='firstName' placeholder={firstName} required  onChange={inputHandle}/>
                     <label htmlFor="lastName"></label>
-                    <input type="text" id="lastName" name="lastName" placeholder={lastName} required onChange={(e)=>setUpdateLastName(e.target.value)}/>
+                    <input type="text" id="lastName" name="lastName" placeholder={lastName} required onChange={inputHandle}/>
                 </div>
                 
                 <div className="userButtons">
@@ -79,7 +80,7 @@ const Profile = () => {
             ) :
             (
               <div>
-                <h2>{authFirstName + ' ' +authLastName}</h2>
+                <h2>{authFirstName + ' ' + authLastName}</h2>
                 <button className="editButton" onClick={editForm}>Edit Name</button>
               </div>
 

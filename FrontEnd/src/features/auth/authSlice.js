@@ -132,6 +132,8 @@ export const authSlice = createSlice({
       //update profile
       .addCase(updateUserData.pending, (state) => {
         state.isLoading = true
+        state.firstName=''
+        state.lastName=''
       })
       .addCase(updateUserData.fulfilled, (state, {payload}) => {
         state.isLoading = false
