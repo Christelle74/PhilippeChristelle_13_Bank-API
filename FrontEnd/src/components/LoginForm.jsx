@@ -16,7 +16,7 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {isLoading, isError, isSuccess, rememberMe, token} = useSelector(
+    const {isLoading, isSuccess, rememberMe, token} = useSelector(
       (state) => state.auth
     )
     
