@@ -20,7 +20,7 @@ const Profile = () => {
         
 
     useEffect(()=>{
-      if(!token){
+      if(!token ){
         navigate ('/login')
       }
       navigate ('/profile')
@@ -39,18 +39,17 @@ const Profile = () => {
     }
 
     //form values
-    const [updateUserName, setUpdateUserName]=useState({firstName:'', lastName:''})
-    
-    const inputHandle = (e) => {
-      setUpdateUserName(() => ({
-        ...updateUserName,
-        [e.target.name]: e.target.value,
-      }))
-    }
+    const [updateFirstName, setUpdateFirstName] = useState("");
+	  const [updateLastName, setUpdateLastName] = useState("");
+   
     const onSave=(e)=>{
       e.preventDefault()
-      dispatch(updateUserData(updateUserName))
-      console.log(updateUserName)
+      const userUpdateData= {
+        firstName: updateFirstName? updateFirstName: firstName,
+        lastName: updateLastName ? updateLastName : lastName,
+      }
+      dispatch(updateUserData(userUpdateData))
+      console.log(userUpdateData)
       setEditNameForm()
       setEditBackground()
     }
@@ -67,9 +66,9 @@ const Profile = () => {
               <form className='userForm'>
                 <div className="inputWrapper">
                     <label htmlFor="firstName"></label>
-                    <input type="text" id="firstName" name='firstName' placeholder={firstName} required  onChange={inputHandle}/>
+                    <input type="text" id="firstName" name='firstName' placeholder={firstName} required  onChange={(e)=>setUpdateFirstName(e.target.value)}/>
                     <label htmlFor="lastName"></label>
-                    <input type="text" id="lastName" name="lastName" placeholder={lastName} required onChange={inputHandle}/>
+                    <input type="text" id="lastName" name="lastName" placeholder={lastName} required onChange={(e)=>setUpdateLastName(e.target.value)}/>
                 </div>
                 
                 <div className="userButtons">

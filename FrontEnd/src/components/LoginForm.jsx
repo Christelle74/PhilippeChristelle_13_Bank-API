@@ -44,7 +44,6 @@ const LoginForm = () => {
     return (
       <>
         <form className='form'  onSubmit={handleSubmit(submitForm)}>
-          {isError && <div>Connexion error </div>}
             <div className="inputWrapper">
                 <label htmlFor="email">Username</label>
                 <input type="email" id="email" name='email'  {...register('email', {required: true})} /> 
