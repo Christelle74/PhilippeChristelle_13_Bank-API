@@ -149,6 +149,6 @@ export const authSlice = createSlice({
   },
 })
 
-export const { logout, isRememberMe, getEmail } = authSlice.actions
+export const { logout, isRememberMe} = authSlice.actions
 export default authSlice.reducer
 

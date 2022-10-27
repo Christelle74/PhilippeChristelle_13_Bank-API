@@ -225,6 +225,69 @@ paths:
         '404':
           description: Transaction not found
         '500':
+          description: Error on the server - Your request could not be completed
+    post:
+      security:
+        Bearer: []
+      tags:
+        - Transactions module
+      summary: Post a specific transaction
+      description: Add a specific transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          type: number
+          required: true
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction posted successully
+          schema:
+            $ref: "#/definitions/Transaction"
+          "400":
+            description: Invalid Fields
+          "500":
+            description: Error on the server - Your request could not be completed
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions module
+      summary: Delete a specific transaction
+      description: Delete a specific transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          type: number
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction deleted successfully
+          schema:
+            tpye: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Success
+        '404':
+          description: Transaction not found
+        '500':
           description: Error on the server - Your request could not be completed 
     patch:
       security:
